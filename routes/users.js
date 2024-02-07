@@ -5,7 +5,9 @@ let postHelpers = require('../helpers/post-helpers')
 const userHelpers = require('../helpers/user-helpers')
 let passwordMismatch = false;
 let emailExists = false;
+const fs = require('fs');
 
+const voucher_codes = require('voucher-code-generator');
 /* GET home page. */
 
 router.get('/', function (req, res, next) {
@@ -13,10 +15,7 @@ router.get('/', function (req, res, next) {
   if (req.session.loggedIn) {
     res.redirect('/home')
   }
-  else if(req.session.adminLoggedIn)
-  {
-    res.redirect('/admin/adminHome');
-  }
+ 
   else {
     res.render('users/login');
   }
@@ -28,7 +27,8 @@ router.get('/home', (req, res) => {
   // console.log("session stored");
   // console.log(userLog)
   if (userLog) {
-    postHelpers.viewAllPosts().then((posts) => {
+    let email=userLog.email;
+    postHelpers.viewPosts(email).then((posts) => {
       res.render('users/home', { posts, user: true, userLog })
     })
 
@@ -193,44 +193,90 @@ router.get('/editPost', (req, res) => {
 
 })
 
-router.get('/updatePost/:id', async (req, res) => {
-  let userLog = req.session.user;
-  if(userLog)
-  {
-    let post = await postHelpers.getPostDetails(req.params.id)
-    console.log(post);
-    res.render('users/updatePosts', { user: true, userLog, post });
 
-  }
- 
-})
 
-router.post('/updatePost/:id', (req, res) => {
-  postHelpers.updatePosts(req.params.id, req.body).then(() => {
-    res.redirect('/editPost');
-    if (req.files.image) {
-      let image = req.files.image;
-      let objId = req.params.id;
-      image.mv('./public/post-images/' + objId + '.jpg');
-    }
-  })
-})
 
-router.get('/deletePost/:id', (req, res) => {
+
+router.get('/deletePost/:id', async (req, res) => {
   let postId = req.params.id;
-  // console.log(req.params);
-  // console.log(req.query)
-  // console.log(postId)
+  // Retrieve the post details including the file name from the database
+  let post = await postHelpers.getPostDetails(postId);
+  
+  // Delete the file from the file system if it exists
+  if (post && post.imageName) {
+    let imagePath = './public/post-images/' + post.imageName;
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      } else {
+        console.log("File deleted successfully");
+      }
+    });
+  }
+
+  // Delete the post from the database
   postHelpers.deletePost(postId).then((response) => {
     res.redirect('/editPost');
-  })
-  console.log(postId)
+  }).catch((err) => {
+    console.error("Error deleting post:", err);
+    res.redirect('/editPost'); // Redirect or handle error appropriately
+  });
+});
 
-})
 
 router.get('/logout', (req, res) => {
   // req.session.loggedIn=false;
   req.session.destroy();
   res.redirect('/userLogin');
 })
+router.get('/generatecode', (req, res) => {
+  const code = voucher_codes.generate({
+    length: 6,
+    count: 1,
+    charset: '0123456789',
+  });
+  res.json(code[0]);
+})
+router.get('/DownloadPost/:id', async (req, res) => {
+  try {
+    let postId = req.params.id;
+    let verificationCode = req.query.code; // Get the verification code from query parameters
+    let isValidCode = false;
+    
+    // Retrieve the post details including the file name from the database
+    let post = await postHelpers.getPostDetails(postId);
+    
+    // Check if the verification code matches the post name
+    if (post && post.name === verificationCode) {
+      isValidCode = true;
+    }
+
+    if (isValidCode) {
+      // Send the file for download
+      if (post && post.imageName) {
+        let imagePath = './public/post-images/' + post.imageName;
+        res.download(imagePath, (err) => {
+          if (err) {
+            console.error("Error downloading file:", err);
+            // Handle error appropriately
+            res.redirect('/home');
+          } else {
+            console.log("File downloaded successfully");
+          }
+        });
+      } else {
+        // Handle case where post or image does not exist
+        res.redirect('/home');
+      }
+    } else {
+      // Handle case where verification code is invalid
+      res.status(400).send("Invalid verification code");
+    }
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    res.redirect('/home');
+  }
+});
+
+
 module.exports = router;

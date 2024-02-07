@@ -5,7 +5,6 @@
         <th>Name</th>
         <th>file</th>
         <th>message</th>
-        {{!-- <th>favoriteCar</th> --}}
         <th></th>
       </tr>
     </thead>
@@ -14,41 +13,73 @@
       <tr>
         <td>
           <div class="d-flex align-items-center">
-
             <div class="">
               <p class="fw-bold mb-1">{{name}}</p>
-              {{!-- <p class="text-muted mb-0">{{model}}</p> --}}
             </div>
           </div>
         </td>
         <td>
-          <img src="/post-images/{{_id}}.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+          <img src="https://static.vecteezy.com/system/resources/previews/000/439/792/original/vector-folder-icon.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
         </td>
         <td>
           <p class="fw-normal mb-1">{{message}}</p>
-
         </td>
-        {{!-- <td>
-          <p class="fw-normal mb-1">{{favoriteCar}}</p>
-
-          <p class="fw-normal mb-1">{{description}}</p>
-        </td> --}}
         <td>
-          {{!-- <a href="/updatePost">
-          <button type="button" class="btn btn-sm btn-primary btn-rounded">
-            Edit
-          </button>
-          </a> --}}
-          <a href="/updatePost/{{_id}}" class="btn btn-primary btn-rounded btn-sm">Edit</a>
-          <a href="/deletePost/{{_id}}" onclick="return confirm('Do you want to delete the post?')">
-          <button type="button" class="ms-2 btn btn-sm btn-danger btn-rounded">
-            Delete
-          </button>
-          </a>
-        </td>
+  <a href="#" class="btn btn-primary btn-rounded btn-sm" onclick="openVerificationModal('{{_id}}')">DOWNLOAD</a>
+  <a href="/deletePost/{{_id}}" onclick="return confirm('Do you want to delete the post?')">
+    <button type="button" class="ms-2 btn btn-sm btn-danger btn-rounded">Delete</button>
+  </a>
+</td>
+
       </tr>
       {{/each}}
-
     </tbody>
   </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Enter Verification Code</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="verificationForm">
+          <div class="mb-3">
+            <label for="verificationCode" class="form-label">Verification Code</label>
+            <input type="text" class="form-control" id="verificationCode" required>
+          </div>
+          <div id="verificationErrorMessage" class="text-danger"></div> <!-- Display error message here -->
+          <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function openVerificationModal(postId) {
+    // Display the modal
+    let modal = new bootstrap.Modal(document.getElementById('verificationModal'));
+    modal.show();
+
+    // Add an event listener to the form inside the modal
+    document.getElementById('verificationForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      let verificationCode = document.getElementById('verificationCode').value;
+      // Make a GET request to the server to verify the code
+      fetch(`/DownloadPost/${postId}?code=${verificationCode}`)
+        .then(response => {
+          if (response.ok) {
+            // If the response is successful, download the file
+            window.location.href = response.url;
+          } else {
+            // If the response indicates an error, display the error message in the modal
+            document.getElementById('verificationErrorMessage').innerText = 'Invalid verification code.';
+          }
+        });
+    });
+  }
+</script>
+
