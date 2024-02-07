@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  {{!-- <h2 class="text-center">To add a product click here..</h2> --}}
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th>Name</th>
+        <th>Message</th>
+        <th>Image</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each posts}}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+             
+              <div class="">
+                <p class="fw-bold mb-1">{{name}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{message}}</p>
+          </td>
+          <td>
+            <p class="fw-normal mb-1"> <img
+                src="/post-images/{{_id}}.jpg"
+                alt=""
+                style="width: 45px; height: 45px"
+                class="rounded-circle"
+              /></p>
+          </td>
+          <td>
+            {{!-- <button type="button" class="btn btn-sm btn-primary btn-rounded">
+              Edit
+            </button> --}}
+            <a href="/admin/deletePosts/{{_id}}" class="ms-2 btn btn-sm btn-danger btn-rounded" onclick="return confirm('Do you want to delete {{name}}?')">Delete</a>
+
+          </td>
+        </tr>
+      {{/each}}
+
+    </tbody>
+  </table>
+</div>

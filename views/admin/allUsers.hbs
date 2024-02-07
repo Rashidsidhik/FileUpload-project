@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        {{!-- <th>Image</th> --}}
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+             
+              <div class="">
+                <p class="fw-bold mb-1">{{name}}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">{{email}}</p>
+          </td>
+          <td>
+            {{!-- <button type="button" class="btn btn-sm btn-primary btn-rounded">
+              Edit
+            </button> --}}
+            <a href="/admin/editUsers/{{_id}}" class="btn btn-sm btn-primary btn-rounded">Edit</a>
+            <a href="/admin/deleteUsers/{{_id}}" class="ms-2 btn btn-sm btn-danger btn-rounded" onclick="return confirm('Do you want to delete {{name}}?')">Delete</a>
+            {{!-- <button type="button" class="ms-2 btn btn-sm btn-danger btn-rounded">
+              Delete
+            </button> --}}
+            
+          </td>
+        </tr>
+      {{/each}}
+
+    </tbody>
+  </table>
+</div>

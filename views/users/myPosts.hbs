@@ -1,0 +1,23 @@
+{{! CARDS }}
+
+<div class="container">
+  <div class="row mt-2">
+    {{#each posts}}
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="/post-images/{{_id}}.jpg" class="img-fluid rounded-start" alt="..." style="height: 400px;width:300px">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{name}}</h5>
+            <p class="card-text">{{message}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+</div>
+</div>

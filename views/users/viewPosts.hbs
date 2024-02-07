@@ -1,0 +1,54 @@
+<div class="container">
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th>Name</th>
+        <th>file</th>
+        <th>message</th>
+        {{!-- <th>favoriteCar</th> --}}
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each posts}}
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+
+            <div class="">
+              <p class="fw-bold mb-1">{{name}}</p>
+              {{!-- <p class="text-muted mb-0">{{model}}</p> --}}
+            </div>
+          </div>
+        </td>
+        <td>
+          <img src="/post-images/{{_id}}.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+        </td>
+        <td>
+          <p class="fw-normal mb-1">{{message}}</p>
+
+        </td>
+        {{!-- <td>
+          <p class="fw-normal mb-1">{{favoriteCar}}</p>
+
+          <p class="fw-normal mb-1">{{description}}</p>
+        </td> --}}
+        <td>
+          {{!-- <a href="/updatePost">
+          <button type="button" class="btn btn-sm btn-primary btn-rounded">
+            Edit
+          </button>
+          </a> --}}
+          <a href="/updatePost/{{_id}}" class="btn btn-primary btn-rounded btn-sm">Edit</a>
+          <a href="/deletePost/{{_id}}" onclick="return confirm('Do you want to delete the post?')">
+          <button type="button" class="ms-2 btn btn-sm btn-danger btn-rounded">
+            Delete
+          </button>
+          </a>
+        </td>
+      </tr>
+      {{/each}}
+
+    </tbody>
+  </table>
+</div>

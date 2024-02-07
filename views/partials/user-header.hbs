@@ -1,0 +1,58 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">User</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/addPost">Add post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/myPosts">My Posts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/editPost">view files</a>
+          </li>
+
+        </ul>
+        <div class="d-flex align-items-center">
+          {{!-- <a href="/userLogin">
+            <button type="button" class="btn btn-primary px-3 me-2">
+            Login
+          </button>
+
+          </a> --}}
+       
+          <button type="button" class="btn btn-dark me-3">
+            {{#if userLog}}
+            {{userLog.name}}
+            {{!-- {{else}}
+            {{username}} --}}
+            {{/if}}
+          </button>
+             <a href="/logout">
+             <button type="button" class="btn btn-danger me-3">
+            Log out
+          </button>
+
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+</header>
