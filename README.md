@@ -3,14 +3,16 @@ Installation
 To install the project dependencies, run:
 
 Copy code
-npm install
+*npm install*
+
 This will install all the necessary packages defined in the package.json file.
 
 Usage
 To start the project, run:
 
 
-npm start
+*npm start*
+
 This will start the project
 
 Contributing
