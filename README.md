@@ -2,7 +2,7 @@
 Installation
 To install the project dependencies, run:
 
-Copy code
+
 *npm install*
 
 This will install all the necessary packages defined in the package.json file.
